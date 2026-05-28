@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Agents for Beginners · Interactive Learning Hub</title>
+  <meta name="description" content="An interactive, hands-on learning hub for Microsoft's AI Agents for Beginners course. Track your progress, explore 16+ lessons, and start building AI agents today." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Animated background -->
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+
+  <!-- Scroll progress bar -->
+  <div id="scroll-progress" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <header class="nav" id="nav">
+    <a href="#top" class="brand">
+      <span class="brand-mark">◆</span>
+      <span class="brand-text">AI Agents <em>for Beginners</em></span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#lessons">Lessons</a>
+      <a href="#how">How it works</a>
+      <a href="#playground">Playground</a>
+      <a href="#start">Get started</a>
+    </nav>
+    <div class="nav-actions">
+      <button id="theme-toggle" class="icon-btn" aria-label="Toggle color theme" title="Toggle theme">
+        <span class="theme-icon">🌙</span>
+      </button>
+      <a class="btn btn-sm" href="https://github.com/microsoft/ai-agents-for-beginners" target="_blank" rel="noopener">★ Star on GitHub</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <main id="top">
+    <section class="hero">
+      <div class="hero-inner">
+        <span class="badge reveal">🚀 Free · Open Source · 16+ Lessons</span>
+        <h1 class="reveal">Learn to build <span class="grad">AI Agents</span><br />from absolute zero.</h1>
+        <p class="lead reveal">A hands-on, beginner-friendly journey through the fundamentals of building intelligent AI agents — design patterns, tool use, RAG, multi-agent systems, and production deployment. Track your progress as you go.</p>
+        <div class="hero-cta reveal">
+          <a href="#lessons" class="btn btn-primary">Start learning →</a>
+          <a href="#playground" class="btn btn-ghost">▶ Try the agent demo</a>
+        </div>
+
+        <!-- Live progress widget -->
+        <div class="progress-card reveal" id="progress-card">
+          <div class="progress-head">
+            <span>Your progress</span>
+            <span id="progress-label">0 / 0 lessons</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+          <div class="progress-foot">
+            <span id="progress-pct">0% complete</span>
+            <button id="reset-progress" class="link-btn">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Animated stats -->
+      <div class="stats reveal">
+        <div class="stat"><div class="stat-num" data-count="16">0</div><div class="stat-label">Core lessons</div></div>
+        <div class="stat"><div class="stat-num" data-count="50" data-suffix="+">0</div><div class="stat-label">Languages</div></div>
+        <div class="stat"><div class="stat-num" data-count="100" data-suffix="%">0</div><div class="stat-label">Free forever</div></div>
+        <div class="stat"><div class="stat-num" data-count="9" data-suffix="+">0</div><div class="stat-label">Design patterns</div></div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="how" class="section">
+      <div class="section-head">
+        <h2>What even <span class="grad">is</span> an AI agent?</h2>
+        <p class="muted">An agent perceives its environment, reasons about a goal, picks an action, uses tools, and learns from the result — looping until the job is done.</p>
+      </div>
+      <div class="loop">
+        <div class="loop-step" data-step="0"><div class="loop-icon">👁️</div><h3>Perceive</h3><p>Read the user request &amp; gather context.</p></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step" data-step="1"><div class="loop-icon">🧠</div><h3>Reason</h3><p>Plan the steps needed to reach the goal.</p></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step" data-step="2"><div class="loop-icon">🛠️</div><h3>Act</h3><p>Call tools, APIs, or other agents.</p></div>
+        <div class="loop-arrow">→</div>
+        <div class="loop-step" data-step="3"><div class="loop-icon">🔁</div><h3>Reflect</h3><p>Check the result, then loop or finish.</p></div>
+      </div>
+    </section>
+
+    <!-- Lessons -->
+    <section id="lessons" class="section">
+      <div class="section-head">
+        <h2>Explore the <span class="grad">curriculum</span></h2>
+        <p class="muted">Start anywhere — each lesson stands on its own. Click a card to mark it complete and watch your progress fill up.</p>
+      </div>
+
+      <div class="lesson-controls">
+        <div class="search-wrap">
+          <span class="search-icon">🔎</span>
+          <input id="search" type="search" placeholder="Search lessons (e.g. RAG, tools, memory)…" aria-label="Search lessons" />
+        </div>
+        <div class="filters" id="filters" role="group" aria-label="Filter by track">
+          <button class="chip active" data-filter="all">All</button>
+          <button class="chip" data-filter="foundations">Foundations</button>
+          <button class="chip" data-filter="patterns">Design Patterns</button>
+          <button class="chip" data-filter="advanced">Advanced</button>
+          <button class="chip" data-filter="production">Production</button>
+        </div>
+      </div>
+
+      <div class="lesson-grid" id="lesson-grid"><!-- injected by JS --></div>
+      <p class="empty-state" id="empty-state" hidden>No lessons match your search. Try another keyword.</p>
+    </section>
+
+    <!-- Interactive playground -->
+    <section id="playground" class="section">
+      <div class="section-head">
+        <h2>Agent loop <span class="grad">playground</span></h2>
+        <p class="muted">Give the agent a goal and watch it think, pick tools, and act — a simplified, illustrative simulation of the reasoning loop.</p>
+      </div>
+      <div class="playground">
+        <div class="pg-input">
+          <label for="goal">Agent goal</label>
+          <input id="goal" type="text" value="Plan a 3-day trip to Tokyo" maxlength="120" />
+          <div class="pg-quick">
+            <button class="chip sm" data-goal="Summarize the latest AI news">News summary</button>
+            <button class="chip sm" data-goal="Find and book a hotel under $150">Book a hotel</button>
+            <button class="chip sm" data-goal="Debug my Python script">Debug code</button>
+          </div>
+          <button id="run-agent" class="btn btn-primary">▶ Run agent</button>
+        </div>
+        <div class="pg-console" id="console" aria-live="polite">
+          <div class="console-line muted">// Agent console — press “Run agent” to begin</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Get started -->
+    <section id="start" class="section start">
+      <div class="start-card">
+        <h2>Ready to build your first agent?</h2>
+        <p class="muted">Set up your environment, grab the code samples, and join thousands of learners.</p>
+        <div class="start-grid">
+          <a class="start-tile" href="../00-course-setup/README.md"><span>⚙️</span><strong>Course Setup</strong><em>Configure your environment</em></a>
+          <a class="start-tile" href="../01-intro-to-ai-agents/README.md"><span>📘</span><strong>Lesson 1</strong><em>Intro to AI Agents</em></a>
+          <a class="start-tile" href="https://github.com/microsoft/ai-agents-for-beginners/fork" target="_blank" rel="noopener"><span>🍴</span><strong>Fork the repo</strong><em>Run the code yourself</em></a>
+          <a class="start-tile" href="https://aka.ms/ai-agents/discord" target="_blank" rel="noopener"><span>💬</span><strong>Join Discord</strong><em>Get your questions answered</em></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Built for learners of <a href="https://github.com/microsoft/ai-agents-for-beginners" target="_blank" rel="noopener">Microsoft's AI Agents for Beginners</a> course. Licensed under MIT.</p>
+    <p class="muted">Your progress is saved locally in your browser — nothing is sent anywhere.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
