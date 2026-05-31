@@ -1,0 +1,47 @@
+name: Deploy Landing Page to GitHub Pages
+
+# Publishes the interactive landing page in /docs to GitHub Pages.
+on:
+  # Run on pushes to the default branch once the page is merged…
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+      - ".github/workflows/deploy-pages.yml"
+  # …and allow manual runs from any branch via the Actions tab.
+  workflow_dispatch:
+
+# Permissions required by the Pages deployment action.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment; skip queued runs in favor of the latest.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload landing page artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Only ship the static landing page in /docs.
+          path: docs
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
