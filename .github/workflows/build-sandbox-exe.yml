@@ -1,0 +1,42 @@
+name: Build Sandbox Setup EXE
+
+on:
+  # Build whenever the tool changes on a PR or push to the default branch.
+  push:
+    paths:
+      - "tools/sandbox-setup/**"
+      - ".github/workflows/build-sandbox-exe.yml"
+  pull_request:
+    paths:
+      - "tools/sandbox-setup/**"
+      - ".github/workflows/build-sandbox-exe.yml"
+  # Allow manual runs from the Actions tab.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows-exe:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PyInstaller
+        run: python -m pip install --upgrade pip pyinstaller
+
+      - name: Build sandbox-setup.exe
+        run: python tools/sandbox-setup/build_exe.py
+
+      - name: Upload executable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sandbox-setup-exe
+          path: tools/sandbox-setup/dist/sandbox-setup.exe
+          if-no-files-found: error
