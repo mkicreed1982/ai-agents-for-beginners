@@ -139,21 +139,43 @@ wreck in a storm, update its beliefs and learned values, and switch to the robus
 ### Plugging in an LLM (System 2)
 
 `DialecticCritic` accepts a `reasoner` callable. The default is a deterministic
-pragmatic rule so the demo runs offline. To make System 2 a real
-generator-vs-critic debate, pass a function that calls your model of choice and
-returns the name of the action it prefers:
+pragmatic rule so the demo runs offline. `code_samples/llm_reasoner.py` implements
+a real **generator → critic → judge** debate (thesis → antithesis → synthesis)
+using three model calls:
+
+```bash
+export GITHUB_TOKEN=...        # https://github.com/settings/tokens
+pip install openai
+cd code_samples
+python llm_reasoner.py
+```
+
+It follows this course's convention — an OpenAI-compatible client pointed at
+GitHub Models (`gpt-4o-mini`) — and wires straight into the network:
 
 ```python
-def llm_reasoner(phase, ranked):
-    # call your LLM with the ranked candidates + their outcome models,
-    # run a thesis/antithesis critique, return the chosen action's name.
-    ...
-
-controller = build_network(env, reasoner=llm_reasoner)
+from llm_reasoner import make_llm_reasoner
+controller = build_network(env, reasoner=make_llm_reasoner())
 ```
 
 Only System 2 calls the model, so the cheap reactive path (System 1) stays fast —
-exactly the Kahneman split the router is built to exploit.
+exactly the Kahneman split the router is built to exploit. If `openai` is missing,
+no token is set, or a call fails, it falls back to a deterministic mock debate so
+the file always runs.
+
+### One-page handout
+
+`code_samples/make_handout.py` renders
+[`agent-design-principles-handout.pdf`](./agent-design-principles-handout.pdf) — a
+single-page **five-level learning ladder** (Decide → Operate → Improve & Reason →
+Strategize → Constrain) that maps every principle to its agent role and build
+decision:
+
+```bash
+pip install reportlab
+cd code_samples
+python make_handout.py
+```
 
 ## Deliberately Excluded Principles (and Why)
 
